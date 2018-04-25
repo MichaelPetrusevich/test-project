@@ -1,53 +1,69 @@
 var angulario = require('./angularioPageOb.js');
 
-describe('Страница angular.io/docs/', function () {
+describe('test page angular.io/docs/', function () {
 
-        var srch;
-        it('load testing url', function() {
+        beforeEach (function (){
             browser.get('https://angular.io/docs/');
         });
 
-    it('testing opening home page', function () {
-        angulario.getHome().click();
-        expect(browser.getCurrentUrl()).toEqual('https://angular.io/');
+        afterEach (function (){
+            console.log("After method executed");
+        });
+
+/*        it('load correct testing url', function() {
+            expect(browser.getCurrentUrl()).toEqual('https://angular.io/docs/');
+            browser.get('https://angular.io/docs/');
+        });*/
+
+    //тестирование верхнего меню
+    describe('testing header', function () {
+
+        it('testing opening home page', function () {
+            angulario.getHome().click();
+            expect(browser.getCurrentUrl()).toEqual('https://angular.io/');
+        });
+
+        it('testing header->blog', function () {
+            browser.ignoreSynchronization = true;
+            angulario.getBlog().click();
+            expect(browser.getCurrentUrl()).toEqual('https://blog.angular.io/');
+            browser.ignoreSynchronization = false;
+        });
+
+        it('testing search', function () {
+            angulario.Search().click().sendKeys("Angular");
+        });
+
     });
 
-    /*
-    it('Testing Header', function () {
-        var head = element(by.partialLinkText('Features'));
-        head.click();
-        expect(browser.getCurrentUrl()).toEqual('https://angular.io/features');
-    });
-    */
+    //тестирование левого меню
+    describe('testing left menu', function () {
 
-    /*
-    it('testing search', function() {
-        element(by.input('search')).sendKeys('angular\n');
-        expect(srch.isElementPresent(by.id('search'))).toBe(false);
-    });
-    */
+        it('open menu', function () {
+            expect(angulario.OpenMenu().getAttribute('class')).toContain('sidenav-open');
+        });
 
-    it('click button left menu', function () {
-        var EC = protractor.ExpectedConditions;
-        // Waits for the element with id 'abc' to be clickable.
-        browser.wait(EC.elementToBeClickable($('button.hamburger.mat-button')), 5000);
-    });
+        it('testing menu',  function () {
+            var EC = protractor.ExpectedConditions;
+            angulario.LeftButton().click();
+            browser.wait(EC.invisibilityOf(angulario.Side()));
+            expect(angulario.OpenMenu().getAttribute('class')).toContain('mode-stable sidenav-closed');
+        });
 
-    it('testing left menu', function () {
-        angulario.getLeftMenu().click();
-        expect(browser.getCurrentUrl()).toEqual('https://angular.io/guide/quickstart');
+        it('testing left menu->GETTING STARTED', function () {
+            angulario.Quickstart().get(0).click();
+            expect(browser.getCurrentUrl()).toEqual('https://angular.io/guide/quickstart');
+        });
     });
 
-    it('testing Footer-first link-About', function () {
-        var about = element(by.partialLinkText('About'));
-        about.click();
-        expect(browser.getCurrentUrl()).toEqual('https://angular.io/about');
-        //expect(browser.getCurrentUrl()).toEqual('https://angular.io/about?group=Angular');
+    //тестирование нижнего меню
+    describe('testing footer', function () {
+
+        it('testing Japanese localization', function () {
+            var jpn = element(by.partialLinkText('日本語版'));
+            jpn.click();
+            expect(browser.getCurrentUrl()).toEqual('https://angular.jp/');
+        });
     });
 
-    it('testing Footer-last link-Japanese localization', function () {
-        var jpn = element(by.partialLinkText('日本語版'));
-        jpn.click();
-        expect(browser.getCurrentUrl()).toEqual('https://angular.jp/');
-    });
 });

@@ -1,17 +1,33 @@
-var angularioPageOb = function() {
+function angularioPageOb () {
+    return {
+        getHome: function () {
+            return $('a.nav-link.home[href*="/"]');
+        },
 
-    /*this.get = function() {
-        browser.get('https://angular.io/docs/');
-    };*/
+        getBlog: function () {
+            return $('a.nav-link[href*="https://blog.angular.io/"]');
+        },
 
-    this.getHome = function () {
-        return element(by.css('a.nav-link.home[href="/"]'));
-    };
+        Search: function () {
+            return $('input[aria-label="search"]');
+        },
 
-    this.getLeftMenu = function () {
-        return element(by.css('aio-nav-menu'));
-    };
+        LeftButton: function () {
+            return $('button.hamburger.mat-button');
+        },
 
+        OpenMenu: function () {
+            return element(by.tagName('aio-shell'));
+        },
+
+        Side: function () {
+            return $('mat-sidenav.sidenav.mat-sidenav');
+        },
+
+        Quickstart: function () {
+            return $$('.vertical-menu-item.level-1');
+        },
+    }
 }
 
 module.exports = new angularioPageOb();
